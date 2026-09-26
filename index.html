@@ -414,8 +414,8 @@
       <button type="button" class="chip" data-value="Fatiguée dès le matin">Fatiguée dès le matin</button>
     </div>
 
-    <label>Comment est ton sommeil ces derniers temps ?</label>
-    <div class="chip-group stacked" data-mode="single" data-name="sommeilQualite">
+    <label>Comment est ton sommeil ces derniers temps ? (plusieurs choix possibles)</label>
+    <div class="chip-group stacked" data-mode="multi" data-name="sommeilQualite">
       <button type="button" class="chip" data-value="Je dors bien">Je dors bien</button>
       <button type="button" class="chip" data-value="J'ai du mal à m'endormir">J'ai du mal à m'endormir</button>
       <button type="button" class="chip" data-value="Je me réveille souvent la nuit">Je me réveille souvent la nuit</button>
@@ -447,29 +447,8 @@
     </div>
   </section>
 
-  <!-- STEP 5 : COMPATIBILITE -->
+  <!-- STEP 5 : MOTIVATION -->
   <section class="step" data-step="5">
-    <h2>Un peu plus d'informations</h2>
-    <p class="step-note">Pour t'orienter au mieux et en toute sécurité.</p>
-
-    <label class="first">Suis-tu un régime spécifique ? (plusieurs choix possibles)</label>
-    <div class="chip-group" data-mode="multi" data-name="regime">
-      <button type="button" class="chip" data-value="Aucun">Aucun</button>
-      <button type="button" class="chip" data-value="Végétarien">Végétarien</button>
-      <button type="button" class="chip" data-value="Végan">Végan</button>
-      <button type="button" class="chip" data-value="Sans gluten">Sans gluten</button>
-      <button type="button" class="chip" data-value="Sans lactose">Sans lactose</button>
-    </div>
-
-    <label>Prends-tu déjà des compléments alimentaires ?</label>
-    <div class="chip-group" data-mode="single" data-name="complements">
-      <button type="button" class="chip" data-value="Oui">Oui</button>
-      <button type="button" class="chip" data-value="Non">Non</button>
-    </div>
-  </section>
-
-  <!-- STEP 6 : MOTIVATION -->
-  <section class="step" data-step="6">
     <h2>Dernière question</h2>
     <p class="step-note">Sur 10, à combien es-tu motivée à atteindre ton objectif ? *</p>
     <div class="chip-group" data-mode="single" data-name="motivation">
@@ -487,22 +466,19 @@
     <div class="error" id="err-motivation">Sélectionne une note.</div>
   </section>
 
-  <!-- STEP 7 : RESULTS -->
-  <section class="step" data-step="7">
+  <!-- STEP 6 : RESULTS -->
+  <section class="step" data-step="6">
     <div class="result-hero">
       <p class="eyebrow">Merci pour tes réponses 🤍</p>
       <h2>Voici le programme que je te recommande</h2>
     </div>
 
     <div id="mainRecs"></div>
-    <div id="secondaryWrap"></div>
 
     <hr class="divider">
     <p class="rec-group-title">Envie d'un produit à l'unité ?</p>
     <p class="step-note" style="margin-top:-6px;">Tu peux aussi commencer en douceur avec un seul produit.</p>
     <div class="all-products" id="allProducts"></div>
-
-    <p class="cta-note" style="margin-top:32px;">Reviens vers Karine par WhatsApp pour lui partager ces résultats et échanger sur ce qui te correspond le mieux 🤍</p>
 
     <div class="social-follow">
       <p class="social-follow-title">On continue sur les réseaux ? 🤍</p>
@@ -528,7 +504,7 @@
 </div>
 
 <script>
-  const TOTAL_STEPS = 7;
+  const TOTAL_STEPS = 6;
   let current = 0;
 
   const PRODUCTS = {
@@ -642,8 +618,8 @@
     const nav = document.getElementById('navBar');
     nav.style.display = (i === 0) ? 'none' : 'flex';
     document.getElementById('backBtn').style.visibility = (i === 0) ? 'hidden' : 'visible';
-    document.getElementById('nextBtn').style.display = (i === 7) ? 'none' : 'block';
-    if(i === 7){ renderResults(); }
+    document.getElementById('nextBtn').style.display = (i === 6) ? 'none' : 'block';
+    if(i === 6){ renderResults(); }
     window.scrollTo(0,0);
     updateProgress();
   }
@@ -695,7 +671,7 @@
       document.getElementById('err-needs').classList.toggle('show', !has);
       ok = has;
     }
-    if(i === 6){
+    if(i === 5){
       const has = !!chipValue('motivation');
       document.getElementById('err-motivation').classList.toggle('show', !has);
       ok = has;
@@ -705,7 +681,7 @@
 
   function nextStep(){
     if(!validateStep(current)) return;
-    if(current < 7){ current++; showStep(current); }
+    if(current < 6){ current++; showStep(current); }
   }
   function prevStep(){
     if(current > 0){ current--; showStep(current); }
@@ -714,29 +690,24 @@
   function getSelectedNeeds(){ return chipValues('needs'); }
 
   function computeRecommendations(){
+    // Chaque besoin coché peut déclencher son propre programme : si plusieurs
+    // besoins couvrent des programmes différents, on les propose tous plutôt
+    // que d'en écarter arbitrairement — c'est plus juste pour la cliente.
     const needs = getSelectedNeeds();
     const has = n => needs.includes(n);
     const digestionCheck = chipValue('digestion_check');
 
-    let main = [];
-    if(has('sommeil') || has('energie')){
-      main = ['cortisol'];
-    } else if(has('ventre')){
-      main = ['ventre_plat'];
-    } else if(has('poids') || has('grignotage')){
-      main = (digestionCheck === 'Oui') ? ['ventre_plat'] : ['perte_poids'];
-    } else if(has('cellulite') || has('retention') || has('peau')){
-      main = ['cellulite'];
+    const order = [];
+    const add = key => { if(!order.includes(key)) order.push(key); };
+
+    if(has('ventre')) add('ventre_plat');
+    if(has('poids') || has('grignotage')){
+      add((digestionCheck === 'Oui') ? 'ventre_plat' : 'perte_poids');
     }
+    if(has('sommeil') || has('energie')) add('cortisol');
+    if(has('cellulite') || has('retention') || has('peau')) add('cellulite');
 
-    const matchedPacks = {};
-    needs.forEach(n => {
-      const pack = NEED_TO_PACK[n];
-      if(pack) matchedPacks[pack] = true;
-    });
-    const secondary = Object.keys(matchedPacks).filter(p => !main.includes(p));
-
-    return { main, secondary };
+    return { main: order };
   }
 
     function packCard(key, isMain){
@@ -772,15 +743,12 @@
   }
 
   function renderResults(){
-    const { main, secondary } = computeRecommendations();
+    const { main } = computeRecommendations();
     const mainWrap = document.getElementById('mainRecs');
-    const secWrap = document.getElementById('secondaryWrap');
+    const title = main.length > 1 ? 'Les programmes qui te correspondent' : 'Le programme que je te recommande';
     mainWrap.innerHTML = main.length
-      ? '<p class="rec-group-title">Le programme que je te recommande</p>' + main.map(k => packCard(k, true)).join('')
+      ? '<p class="rec-group-title">' + title + '</p>' + main.map(k => packCard(k, true)).join('')
       : '<p class="step-note">Sélectionne au moins un besoin pour voir une recommandation.</p>';
-    secWrap.innerHTML = secondary.length
-      ? '<p class="rec-group-title">Peut aussi t\'intéresser</p>' + secondary.map(k => packCard(k, false)).join('')
-      : '';
 
     const allWrap = document.getElementById('allProducts');
     allWrap.innerHTML = Object.keys(PRODUCTS).map(key => {

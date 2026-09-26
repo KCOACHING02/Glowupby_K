@@ -113,7 +113,7 @@
   }
   .marquee-track{
     display:flex; gap:14px; width:max-content;
-    animation:marquee-scroll 28s linear infinite;
+    animation:marquee-scroll 12s linear infinite;
   }
   .marquee:hover .marquee-track{ animation-play-state:paused; }
   .marquee-item{
@@ -377,123 +377,8 @@
     </div>
   </section>
 
-  <!-- STEP 1 : CONTACT -->
+  <!-- STEP 1 : BESOINS -->
   <section class="step" data-step="1">
-    <h2>Faisons connaissance</h2>
-    <p class="step-note">Facultatif — tu peux aussi rester anonyme et passer directement à la suite.</p>
-
-    <label class="first">Prénom et nom</label>
-    <input type="text" id="nom" placeholder="Ton prénom et nom (facultatif)">
-
-    <label>Adresse e-mail</label>
-    <input type="email" id="email" placeholder="ton@email.com (facultatif)">
-    <div class="error" id="err-email">Cette adresse e-mail ne semble pas valide.</div>
-
-    <label>Pays de résidence</label>
-    <div class="chip-group" data-mode="single" data-name="pays">
-      <button type="button" class="chip" data-value="France">France</button>
-      <button type="button" class="chip" data-value="Belgique">Belgique</button>
-      <button type="button" class="chip" data-value="Luxembourg">Luxembourg</button>
-      <button type="button" class="chip" data-value="Suisse">Suisse</button>
-      <button type="button" class="chip" data-value="Maroc">Maroc</button>
-      <button type="button" class="chip" data-value="Autre">Autre</button>
-    </div>
-  </section>
-
-  <!-- STEP 2 : PROFIL -->
-  <section class="step" data-step="2">
-    <h2>Ton profil</h2>
-    <p class="step-note">Quelques repères pour mieux cerner ta situation.</p>
-
-    <label class="first">Ta tranche d'âge *</label>
-    <div class="chip-group" data-mode="single" data-name="age">
-      <button type="button" class="chip" data-value="18-25 ans">18-25 ans</button>
-      <button type="button" class="chip" data-value="26-35 ans">26-35 ans</button>
-      <button type="button" class="chip" data-value="36-45 ans">36-45 ans</button>
-      <button type="button" class="chip" data-value="46-55 ans">46-55 ans</button>
-      <button type="button" class="chip" data-value="56 ans et +">56 ans et +</button>
-    </div>
-
-    <label>Ta tranche de poids *</label>
-    <div class="chip-group" data-mode="single" data-name="poids">
-      <button type="button" class="chip" data-value="- de 60 kg">- de 60 kg</button>
-      <button type="button" class="chip" data-value="60-70 kg">60-70 kg</button>
-      <button type="button" class="chip" data-value="70-80 kg">70-80 kg</button>
-      <button type="button" class="chip" data-value="80-90 kg">80-90 kg</button>
-      <button type="button" class="chip" data-value="90 kg et +">90 kg et +</button>
-    </div>
-
-    <label>Ta tranche de taille *</label>
-    <div class="chip-group" data-mode="single" data-name="taille">
-      <button type="button" class="chip" data-value="- de 155 cm">- de 155 cm</button>
-      <button type="button" class="chip" data-value="155-165 cm">155-165 cm</button>
-      <button type="button" class="chip" data-value="165-175 cm">165-175 cm</button>
-      <button type="button" class="chip" data-value="175-185 cm">175-185 cm</button>
-      <button type="button" class="chip" data-value="185 cm et +">185 cm et +</button>
-    </div>
-  </section>
-
-  <!-- STEP 3 : ALIMENTATION -->
-  <section class="step" data-step="3">
-    <h2>Tes habitudes alimentaires</h2>
-    <p class="step-note">Quelques questions rapides pour comprendre ton quotidien.</p>
-
-    <label class="first">Combien de repas prends-tu par jour ? *</label>
-    <div class="chip-group" data-mode="single" data-name="repas">
-      <button type="button" class="chip" data-value="1 à 2 repas">1 à 2 repas</button>
-      <button type="button" class="chip" data-value="3 repas">3 repas</button>
-      <button type="button" class="chip" data-value="4 à 5 repas">4 à 5 repas</button>
-      <button type="button" class="chip" data-value="C'est variable">C'est variable</button>
-    </div>
-
-    <label>As-tu tendance à... (plusieurs choix possibles)</label>
-    <div class="chip-group stacked" data-mode="multi" data-name="habitudes">
-      <button type="button" class="chip" data-value="Sauter des repas">Sauter des repas</button>
-      <button type="button" class="chip" data-value="Grignoter entre les repas">Grignoter entre les repas</button>
-      <button type="button" class="chip" data-value="Manger sucré le soir">Manger sucré le soir</button>
-      <button type="button" class="chip" data-value="Manger équilibré la plupart du temps">Manger équilibré la plupart du temps</button>
-    </div>
-  </section>
-
-  <!-- STEP 4 : SPORT -->
-  <section class="step" data-step="4">
-    <h2>Ton activité physique</h2>
-    <p class="step-note">Pour adapter mes conseils à ton rythme de vie.</p>
-
-    <label class="first">Fais-tu du sport régulièrement ? *</label>
-    <div class="chip-group" data-mode="single" data-name="sport">
-      <button type="button" class="chip" data-value="Oui">Oui</button>
-      <button type="button" class="chip" data-value="Non">Non</button>
-    </div>
-
-    <div class="conditional sub-question" id="sportFreqWrap">
-      <label>À quelle fréquence ?</label>
-      <div class="chip-group" data-mode="single" data-name="sportFreq">
-        <button type="button" class="chip" data-value="1x par semaine">1x par semaine</button>
-        <button type="button" class="chip" data-value="2-3x par semaine">2-3x par semaine</button>
-        <button type="button" class="chip" data-value="4x et + par semaine">4x et + par semaine</button>
-      </div>
-    </div>
-
-    <div class="conditional sub-question" id="sportRaisonWrap">
-      <label>Pour quelle raison principalement ?</label>
-      <div class="chip-group" data-mode="single" data-name="sportRaison">
-        <button type="button" class="chip" data-value="Manque de temps">Manque de temps</button>
-        <button type="button" class="chip" data-value="Manque de motivation">Manque de motivation</button>
-        <button type="button" class="chip" data-value="Raison de santé">Raison de santé</button>
-        <button type="button" class="chip" data-value="Autre">Autre</button>
-      </div>
-    </div>
-
-    <label>As-tu des enfants à la maison pour qui tu prépares les repas ? *</label>
-    <div class="chip-group" data-mode="single" data-name="enfants">
-      <button type="button" class="chip" data-value="Oui">Oui</button>
-      <button type="button" class="chip" data-value="Non">Non</button>
-    </div>
-  </section>
-
-  <!-- STEP 5 : BESOINS -->
-  <section class="step" data-step="5">
     <h2>Pour mieux cibler tes besoins</h2>
     <p class="step-note">Sélectionne tout ce qui te concerne, tu peux en cocher plusieurs. *</p>
     <div class="chip-group stacked" data-mode="multi" data-name="needs">
@@ -517,8 +402,53 @@
     </div>
   </section>
 
-  <!-- STEP 6 : SANTE COMPLEMENTAIRE -->
-  <section class="step" data-step="6">
+  <!-- STEP 2 : ENERGIE & SOMMEIL -->
+  <section class="step" data-step="2">
+    <h2>Ton énergie & ton sommeil</h2>
+    <p class="step-note">Pour cibler les actifs les plus adaptés à ton rythme.</p>
+
+    <label class="first">Comment est ton énergie en général dans la journée ?</label>
+    <div class="chip-group stacked" data-mode="single" data-name="energieNiveau">
+      <button type="button" class="chip" data-value="Stable toute la journée">Stable toute la journée</button>
+      <button type="button" class="chip" data-value="Un gros coup de fatigue l'après-midi">Un gros coup de fatigue l'après-midi</button>
+      <button type="button" class="chip" data-value="Fatiguée dès le matin">Fatiguée dès le matin</button>
+    </div>
+
+    <label>Comment est ton sommeil ces derniers temps ?</label>
+    <div class="chip-group stacked" data-mode="single" data-name="sommeilQualite">
+      <button type="button" class="chip" data-value="Je dors bien">Je dors bien</button>
+      <button type="button" class="chip" data-value="J'ai du mal à m'endormir">J'ai du mal à m'endormir</button>
+      <button type="button" class="chip" data-value="Je me réveille souvent la nuit">Je me réveille souvent la nuit</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 : GRIGNOTAGE -->
+  <section class="step" data-step="3">
+    <h2>Ton rapport à l'alimentation</h2>
+    <p class="step-note">Pour savoir si un coupe-faim naturel peut t'aider.</p>
+
+    <label class="first">As-tu souvent des envies de sucré ou de grignotage entre les repas ?</label>
+    <div class="chip-group stacked" data-mode="single" data-name="grignotageFreq">
+      <button type="button" class="chip" data-value="Rarement">Rarement</button>
+      <button type="button" class="chip" data-value="Parfois">Parfois</button>
+      <button type="button" class="chip" data-value="Souvent, difficile à contrôler">Souvent, difficile à contrôler</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 : PEAU & SILHOUETTE -->
+  <section class="step" data-step="4">
+    <h2>Ta peau & ta silhouette</h2>
+    <p class="step-note">Sélectionne tout ce qui te correspond, plusieurs choix possibles.</p>
+    <div class="chip-group stacked" data-mode="multi" data-name="peauSilhouette">
+      <button type="button" class="chip" data-value="Ferme et tonique">Ferme et tonique</button>
+      <button type="button" class="chip" data-value="Manque de fermeté">Manque de fermeté</button>
+      <button type="button" class="chip" data-value="Cellulite visible">Cellulite visible</button>
+      <button type="button" class="chip" data-value="Peau terne, sans éclat">Peau terne, sans éclat</button>
+    </div>
+  </section>
+
+  <!-- STEP 5 : COMPATIBILITE -->
+  <section class="step" data-step="5">
     <h2>Un peu plus d'informations</h2>
     <p class="step-note">Pour t'orienter au mieux et en toute sécurité.</p>
 
@@ -536,25 +466,10 @@
       <button type="button" class="chip" data-value="Oui">Oui</button>
       <button type="button" class="chip" data-value="Non">Non</button>
     </div>
-
-    <label>As-tu déjà suivi un programme minceur ou bien-être ?</label>
-    <div class="chip-group" data-mode="single" data-name="programme">
-      <button type="button" class="chip" data-value="Oui">Oui</button>
-      <button type="button" class="chip" data-value="Non">Non</button>
-    </div>
-
-    <label>Comment préfères-tu être recontactée ?</label>
-    <div class="chip-group stacked" data-mode="single" data-name="canal">
-      <button type="button" class="chip" data-value="Instagram">Instagram</button>
-      <button type="button" class="chip" data-value="WhatsApp">WhatsApp</button>
-      <button type="button" class="chip" data-value="Appel">Appel</button>
-      <button type="button" class="chip" data-value="E-mail">E-mail</button>
-      <button type="button" class="chip" data-value="Je ne souhaite pas être contactée">Je ne souhaite pas être contactée</button>
-    </div>
   </section>
 
-  <!-- STEP 7 : MOTIVATION -->
-  <section class="step" data-step="7">
+  <!-- STEP 6 : MOTIVATION -->
+  <section class="step" data-step="6">
     <h2>Dernière question</h2>
     <p class="step-note">Sur 10, à combien es-tu motivée à atteindre ton objectif ? *</p>
     <div class="chip-group" data-mode="single" data-name="motivation">
@@ -572,12 +487,11 @@
     <div class="error" id="err-motivation">Sélectionne une note.</div>
   </section>
 
-  <!-- STEP 8 : RESULTS -->
-  <section class="step" data-step="8">
+  <!-- STEP 7 : RESULTS -->
+  <section class="step" data-step="7">
     <div class="result-hero">
       <p class="eyebrow">Merci pour tes réponses 🤍</p>
       <h2>Voici le programme que je te recommande</h2>
-      <p>En choisissant le pack ci-dessous, tu commandes le ou les compléments qui te correspondent — et cette commande te donne directement accès à mon accompagnement complet : semaine détox, plans alimentaires, habitudes quotidiennes et groupe de soutien 🤍</p>
     </div>
 
     <div id="mainRecs"></div>
@@ -614,7 +528,7 @@
 </div>
 
 <script>
-  const TOTAL_STEPS = 8;
+  const TOTAL_STEPS = 7;
   let current = 0;
 
   const PRODUCTS = {
@@ -728,8 +642,8 @@
     const nav = document.getElementById('navBar');
     nav.style.display = (i === 0) ? 'none' : 'flex';
     document.getElementById('backBtn').style.visibility = (i === 0) ? 'hidden' : 'visible';
-    document.getElementById('nextBtn').style.display = (i === 8) ? 'none' : 'block';
-    if(i === 8){ renderResults(); }
+    document.getElementById('nextBtn').style.display = (i === 7) ? 'none' : 'block';
+    if(i === 7){ renderResults(); }
     window.scrollTo(0,0);
     updateProgress();
   }
@@ -777,26 +691,11 @@
   function validateStep(i){
     let ok = true;
     if(i === 1){
-      const email = document.getElementById('email').value.trim();
-      const emailOk = email === '' || /\S+@\S+\.\S+/.test(email);
-      document.getElementById('err-email').classList.toggle('show', !emailOk);
-      ok = emailOk;
-    }
-    if(i === 2){
-      ok = !!chipValue('age') && !!chipValue('poids') && !!chipValue('taille');
-    }
-    if(i === 3){
-      ok = !!chipValue('repas');
-    }
-    if(i === 4){
-      ok = !!chipValue('sport') && !!chipValue('enfants');
-    }
-    if(i === 5){
       const has = chipValues('needs').length > 0;
       document.getElementById('err-needs').classList.toggle('show', !has);
       ok = has;
     }
-    if(i === 7){
+    if(i === 6){
       const has = !!chipValue('motivation');
       document.getElementById('err-motivation').classList.toggle('show', !has);
       ok = has;
@@ -806,7 +705,7 @@
 
   function nextStep(){
     if(!validateStep(current)) return;
-    if(current < 8){ current++; showStep(current); }
+    if(current < 7){ current++; showStep(current); }
   }
   function prevStep(){
     if(current > 0){ current--; showStep(current); }

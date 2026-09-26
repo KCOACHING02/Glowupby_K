@@ -165,6 +165,40 @@
     font-family:'Fraunces', serif; font-style:italic; color:var(--rose-deep);
     font-size:1rem; margin:28px 0 12px;
   }
+
+  .pack-card{
+    border:1.5px solid var(--line); border-radius:22px; padding:24px 20px;
+    margin-bottom:20px; background:var(--white);
+  }
+  .pack-card.pack-main{ border-color:var(--rose); box-shadow:0 8px 28px rgba(192,128,121,0.16); }
+  .pack-card-head{ display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; }
+  .pack-emoji{ font-size:1.7rem; line-height:1.2; }
+  .pack-name{ font-family:'Fraunces', serif; font-weight:500; font-size:1.2rem; margin:0 0 2px; }
+  .pack-tagline{ color:var(--ink-soft); font-size:.88rem; margin:0; }
+  .pack-includes{ list-style:none; padding:0; margin:0 0 18px; }
+  .pack-includes li{ font-size:.86rem; line-height:1.55; padding:5px 0 5px 24px; position:relative; }
+  .pack-includes li::before{ content:'✓'; position:absolute; left:0; top:5px; color:var(--sage); font-weight:700; }
+  .pack-options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .pack-options.single{ grid-template-columns:1fr; }
+  .pack-option{ border:1px solid var(--line); border-radius:14px; padding:16px 10px 14px; text-align:center; position:relative; }
+  .pack-option.highlight{ border-color:var(--rose); background:var(--rose-light); }
+  .pack-badge{
+    position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--rose);
+    color:#fff; font-size:.62rem; font-weight:700; padding:3px 10px; border-radius:999px;
+    white-space:nowrap; letter-spacing:.02em;
+  }
+  .pack-option-label{ font-size:.78rem; font-weight:600; margin:4px 0 6px; color:var(--ink-soft); }
+  .pack-oldprice{ text-decoration:line-through; color:var(--ink-soft); font-size:.82rem; margin-right:4px; }
+  .pack-option-price{ font-family:'Fraunces', serif; font-size:1.3rem; color:var(--rose-deep); margin:0 0 4px; }
+  .pack-option-pay{ font-size:.7rem; color:var(--ink-soft); margin:0 0 12px; line-height:1.4; }
+  .pack-cta{
+    display:block; text-align:center; background:var(--rose); color:#fff; text-decoration:none;
+    font-weight:600; font-size:.85rem; border-radius:999px; padding:10px;
+  }
+  .pack-cta:hover{ background:var(--rose-deep); }
+  .pack-hint{ font-size:.78rem; color:var(--ink-soft); line-height:1.6; margin:14px 0 0; text-align:center; }
+  .pack-hint a{ color:var(--rose-deep); font-weight:600; text-decoration:underline; }
+
   .product-card{
     border:1.5px solid var(--line); border-radius:var(--radius);
     margin-bottom:20px; overflow:hidden; background:var(--white);
@@ -481,15 +515,16 @@
   <section class="step" data-step="8">
     <div class="result-hero">
       <p class="eyebrow">Merci pour tes réponses 🤍</p>
-      <h2>Voici ce qui pourrait t'aider</h2>
-      <p>D'après ce que tu m'as partagé, voici les produits que je recommande le plus souvent pour ce type de besoin.</p>
+      <h2>Voici le programme que je te recommande</h2>
+      <p>En choisissant le pack ci-dessous, tu commandes le ou les compléments qui te correspondent — et cette commande te donne directement accès à mon accompagnement complet : semaine détox, plans alimentaires, habitudes quotidiennes et groupe de soutien 🤍</p>
     </div>
 
     <div id="mainRecs"></div>
     <div id="secondaryWrap"></div>
 
     <hr class="divider">
-    <p class="rec-group-title">Découvrir toute la gamme</p>
+    <p class="rec-group-title">Envie d'un produit à l'unité ?</p>
+    <p class="step-note" style="margin-top:-6px;">Tu peux aussi commencer en douceur avec un seul produit.</p>
     <div class="all-products" id="allProducts"></div>
 
     <p class="cta-note" style="margin-top:32px;">Reviens vers Karine par WhatsApp pour lui partager ces résultats et échanger sur ce qui te correspond le mieux 🤍</p>
@@ -530,15 +565,67 @@
     omega: { name:'STM Omega', tag:"Oméga-3, articulations & bien-être global", color:'#5F7A4E', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/stm-omg-1' },
   };
 
-  const NEED_MAP = {
-    poids:      { label:'Perte de poids', products:['pulse','bao'] },
-    ventre:     { label:'Ventre gonflé / ballonnements', products:['bao'] },
-    grignotage: { label:'Grignotage / envie de sucre', products:['pulse','bao'] },
-    energie:    { label:"Manque d'énergie", products:['stm'] },
-    sommeil:    { label:'Sommeil / stress / cortisol', products:['stm','bao'] },
-    cellulite:  { label:'Cellulite / manque de fermeté', products:['gen3','liv'] },
-    retention:  { label:"Rétention d'eau / sensation de lourdeur", products:['liv'] },
-    peau:       { label:"Peau terne / envie d'éclat", products:['liv','gen3'] },
+  const NEED_TO_PACK = {
+    poids:      'ventre_plat',
+    ventre:     'ventre_plat',
+    grignotage: 'ventre_plat',
+    energie:    'cortisol',
+    sommeil:    'cortisol',
+    cellulite:  'drainage',
+    retention:  'drainage',
+    peau:       'drainage',
+  };
+
+  const PACKS = {
+    ventre_plat: {
+      emoji: '🥝',
+      name: 'Programme Ventre Plat',
+      tagline: 'Perte de ventre, digestion & satiété',
+      includes: [
+        "Une semaine de détox pour remettre de bonnes bases",
+        "Un programme alimentaire simple avec des repas rassasiants",
+        "Des exercices ciblés pour tonifier le ventre",
+        "BAO+ : prébiotiques, postbiotiques, fibres & glucomannane pour dégonfler et couper la faim",
+        "Mes habitudes quotidiennes, mes conseils et le groupe de soutien",
+      ],
+      priceOptions: [
+        { label:'1 mois', price:'74 €', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/bao-1', cta:'Choisir' },
+        { label:'3 mois — recommandé', price:'189 €', oldPrice:'222 €', pay:'ou 4x 47,33 € avec Scalapay', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/fr-bao-3', cta:'Choisir', highlight:true },
+      ],
+    },
+    cortisol: {
+      emoji: '💚',
+      name: 'Programme Cortisol',
+      tagline: 'Sommeil, stress & énergie retrouvée',
+      includes: [
+        "Une semaine de détox",
+        "Un programme alimentaire avec des idées de repas simples",
+        "De petites habitudes quotidiennes pour apaiser le système nerveux",
+        "STM : adaptogènes, antioxydants & actifs énergisants pour la récupération et la vitalité",
+        "BAO+ pour le transit et la satiété",
+        "Mon accompagnement, mes conseils et le groupe de soutien",
+      ],
+      priceOptions: [
+        { label:'1 mois', price:'189 €', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/fr-bao-stm-bundle', cta:'Choisir' },
+        { label:'3 mois — recommandé', price:'294 €', oldPrice:'350 €', pay:'ou 4x 73,50 € (Scalapay) / 3x 98 € (Klarna)', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/fr-bao-stm-bundle', cta:'Choisir', highlight:true },
+      ],
+    },
+    drainage: {
+      emoji: '💙',
+      name: 'Programme Drainage',
+      tagline: "Cellulite, rétention d'eau & éclat de la peau",
+      includes: [
+        "Une semaine de détox",
+        "30 jours de challenge avec accès au groupe (conseils & motivation)",
+        "Les plans alimentaires de notre diététicienne",
+        "Des recettes saines et gourmandes",
+        "Gen3 : collagène, acide hyaluronique & extraits naturels pour raffermir la peau et améliorer l'aspect de la cellulite",
+        "LIV Antioxydants : superaliments & fruits des bois pour stimuler la circulation et réduire la rétention d'eau",
+      ],
+      priceOptions: [
+        { label:'Cure complète', price:'146,60 €', pay:'ou 3x 49 € (Klarna/Scalapay)', url:'https://shop.jifu.com/fr/fr/Kcoaching/product/liv-gel-1', cta:'Choisir', highlight:true },
+      ],
+    },
   };
 
   function updateProgress(){
@@ -637,7 +724,8 @@
     const needs = getSelectedNeeds();
     const tally = {};
     needs.forEach(n => {
-      (NEED_MAP[n].products || []).forEach(p => { tally[p] = (tally[p]||0) + 1; });
+      const pack = NEED_TO_PACK[n];
+      if(pack){ tally[pack] = (tally[pack]||0) + 1; }
     });
     const sorted = Object.keys(tally).sort((a,b) => tally[b]-tally[a]);
     const maxCount = sorted.length ? tally[sorted[0]] : 0;
@@ -646,24 +734,29 @@
     return { main, secondary };
   }
 
-  function productCard(key){
-    const p = PRODUCTS[key];
-    let links = `<a href="${p.url}" target="_blank" rel="noopener">Voir le produit</a>`;
-    if(p.bundleUrl){ links += `<a href="${p.bundleUrl}" target="_blank" rel="noopener">${p.bundleLabel}</a>`; }
-    const imageBlock = p.image
-      ? `<div class="product-photo-wrap"><img class="product-photo" src="${p.image}" alt="${p.name}"></div>`
-      : `<div class="product-photo-wrap"><div class="swatch" style="background:${p.color}22;width:52px;height:52px;"><div style="width:16px;height:16px;border-radius:50%;background:${p.color};"></div></div></div>`;
-    return `<div class="product-card">
-      ${imageBlock}
-      <div class="product-card-header" style="padding-top:16px;">
+  function packCard(key, isMain){
+    const p = PACKS[key];
+    const optionsClass = p.priceOptions.length === 1 ? 'pack-options single' : 'pack-options';
+    const options = p.priceOptions.map(o => `
+      <div class="pack-option ${o.highlight ? 'highlight' : ''}">
+        ${o.highlight ? '<span class="pack-badge">Recommandé</span>' : ''}
+        <p class="pack-option-label">${o.label}</p>
+        <p class="pack-option-price">${o.oldPrice ? `<span class="pack-oldprice">${o.oldPrice}</span>` : ''}${o.price}</p>
+        ${o.pay ? `<p class="pack-option-pay">${o.pay}</p>` : ''}
+        <a class="pack-cta" href="${o.url}" target="_blank" rel="noopener">${o.cta}</a>
+      </div>
+    `).join('');
+    return `<div class="pack-card ${isMain ? 'pack-main' : ''}">
+      <div class="pack-card-head">
+        <span class="pack-emoji">${p.emoji}</span>
         <div>
-          <p class="product-name">${p.name}</p>
-          <p class="product-tag">${p.tag}</p>
+          <p class="pack-name">${p.name}</p>
+          <p class="pack-tagline">${p.tagline}</p>
         </div>
       </div>
-      <div class="product-card-footer">
-        <div class="product-links">${links}</div>
-      </div>
+      <ul class="pack-includes">${p.includes.map(i => `<li>${i}</li>`).join('')}</ul>
+      <div class="${optionsClass}">${options}</div>
+      <p class="pack-hint">Une question sur la durée ou le paiement en plusieurs fois ? <a href="https://www.instagram.com/glowup.by.k?stkn=MWYxdWQ0ODRuY3YyMw==" target="_blank" rel="noopener">Écris-moi</a> 🤍</p>
     </div>`;
   }
 
@@ -671,8 +764,12 @@
     const { main, secondary } = computeRecommendations();
     const mainWrap = document.getElementById('mainRecs');
     const secWrap = document.getElementById('secondaryWrap');
-    mainWrap.innerHTML = '<p class="rec-group-title">Mes recommandations pour toi</p>' + (main.length ? main.map(productCard).join('') : '<p class="step-note">Sélectionne au moins un besoin pour voir une recommandation.</p>');
-    secWrap.innerHTML = secondary.length ? '<p class="rec-group-title">Peut aussi t\'intéresser</p>' + secondary.map(productCard).join('') : '';
+    mainWrap.innerHTML = main.length
+      ? '<p class="rec-group-title">Le programme que je te recommande</p>' + main.map(k => packCard(k, true)).join('')
+      : '<p class="step-note">Sélectionne au moins un besoin pour voir une recommandation.</p>';
+    secWrap.innerHTML = secondary.length
+      ? '<p class="rec-group-title">Peut aussi t\'intéresser</p>' + secondary.map(k => packCard(k, false)).join('')
+      : '';
 
     const allWrap = document.getElementById('allProducts');
     allWrap.innerHTML = Object.keys(PRODUCTS).map(key => {

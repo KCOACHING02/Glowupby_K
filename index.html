@@ -746,12 +746,27 @@
     return ok;
   }
 
+  function shouldShowStep(i){
+    if(i === 4){
+      const needs = getSelectedNeeds();
+      return needs.includes('cellulite') || needs.includes('peau');
+    }
+    return true;
+  }
+
   function nextStep(){
     if(!validateStep(current)) return;
-    if(current < 6){ current++; showStep(current); }
+    let next = current + 1;
+    while(next < 6 && !shouldShowStep(next)) next++;
+    current = next;
+    showStep(current);
   }
   function prevStep(){
-    if(current > 0){ current--; showStep(current); }
+    if(current <= 0) return;
+    let prev = current - 1;
+    while(prev > 0 && !shouldShowStep(prev)) prev--;
+    current = prev;
+    showStep(current);
   }
 
   function getSelectedNeeds(){ return chipValues('needs'); }

@@ -760,19 +760,38 @@
     // Chaque besoin coché peut déclencher son propre programme : si plusieurs
     // besoins couvrent des programmes différents, on les propose tous plutôt
     // que d'en écarter arbitrairement — c'est plus juste pour la cliente.
+    // Les réponses des étapes 2 à 4 (énergie/sommeil, grignotage, peau/silhouette)
+    // viennent renforcer cette sélection : un signal fort là-bas peut faire
+    // apparaître un programme même si le besoin correspondant n'a pas été
+    // coché à l'étape 1.
     const needs = getSelectedNeeds();
     const has = n => needs.includes(n);
     const digestionCheck = chipValue('digestion_check');
+
+    const energieNiveau = chipValue('energieNiveau');
+    const sommeilQualite = chipValues('sommeilQualite');
+    const grignotageFreq = chipValue('grignotageFreq');
+    const peauSilhouette = chipValues('peauSilhouette');
 
     const order = [];
     const add = key => { if(!order.includes(key)) order.push(key); };
 
     if(has('ventre')) add('ventre_plat');
-    if(has('poids') || has('grignotage')){
+
+    const grignotageFort = grignotageFreq === 'Souvent, difficile à contrôler';
+    if(has('poids') || has('grignotage') || grignotageFort){
       add((digestionCheck === 'Oui') ? 'ventre_plat' : 'perte_poids');
     }
-    if(has('sommeil') || has('energie')) add('cortisol');
-    if(has('cellulite') || has('retention') || has('peau')) add('cellulite');
+
+    const sommeilDifficile = sommeilQualite.includes("J'ai du mal à m'endormir")
+      || sommeilQualite.includes('Je me réveille souvent la nuit');
+    const energieBasse = energieNiveau === 'Fatiguée dès le matin';
+    if(has('sommeil') || has('energie') || sommeilDifficile || energieBasse) add('cortisol');
+
+    const peauMarquee = peauSilhouette.includes('Cellulite visible')
+      || peauSilhouette.includes('Manque de fermeté')
+      || peauSilhouette.includes('Peau terne, sans éclat');
+    if(has('cellulite') || has('retention') || has('peau') || peauMarquee) add('cellulite');
 
     return { main: order };
   }
